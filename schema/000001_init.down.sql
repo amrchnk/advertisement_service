@@ -1,0 +1,3 @@
+DROP TABLE advert CASCADE;
+
+DROP TABLE photos;
