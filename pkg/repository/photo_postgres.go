@@ -1,5 +1,11 @@
 package repository
 
+import (
+	"github.com/amrchnk/advertisement_service/pkg/models"
+    "github.com/jmoiron/sqlx"
+	"fmt"
+)
+
 type PhotoPostgres struct{
 	db *sqlx.DB
 }

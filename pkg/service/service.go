@@ -15,6 +15,6 @@ type Service struct{
 
 func NewService(repos *repository.Repository) *Service{
     return &Service{
-        Advert: NewAdvertService(repos.Advert),
+        Advert: NewAdvertService(repos),
     }
 }

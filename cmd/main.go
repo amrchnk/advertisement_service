@@ -2,10 +2,10 @@ package main
 
 import (
     _ "github.com/lib/pq"
-    "github.com/amrchnk/advertisement_service"
     "github.com/amrchnk/advertisement_service/pkg/handler"
     "github.com/amrchnk/advertisement_service/pkg/repository"
     "github.com/amrchnk/advertisement_service/pkg/service"
+    "github.com/amrchnk/advertisement_service/server"
     "github.com/spf13/viper"
     "github.com/joho/godotenv"
     "github.com/sirupsen/logrus"
@@ -41,7 +41,7 @@ func main(){
     services:=service.NewService(repos)
     handlers:=handler.NewHandler(services)
 
-    srv:=new(todo.Server)
+    srv:=new(server.Server)
     go func(){
         if err:=srv.Run(viper.GetString("port"),handlers.InitRoutes());err!=nil{
             logrus.Fatalf("Error with runing http-server: %s",err.Error())

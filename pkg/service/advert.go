@@ -3,29 +3,29 @@ package service
 import (
     "github.com/amrchnk/advertisement_service/pkg/models"
     "github.com/amrchnk/advertisement_service/pkg/repository"
-    "errors"
+//     "errors"
 )
 
 type AdvertService struct{
-    repo repository.Repository
+    repo *repository.Repository
 }
 
-func NewAdvertService(repo repository.Advert)*AdvertService{
+func NewAdvertService(repo *repository.Repository)*AdvertService{
     return &AdvertService{repo:repo}
 }
 
 func (s *AdvertService)CreateAdvert(advert models.Advert)(int,error){
 
     if ok:=advert.ValidateFields();ok!=nil{
-        return 0,errors.New(ok)
+        return 0,ok
     }
 
     id,err:=s.repo.CreateAdvert(advert)
 
     for i,item:=range advert.Photos{
-        var photo models.Photo{
+        var photo = models.Photo{
             Link:item,
-            First:false
+            First:false,
         }
 
         if i==0{

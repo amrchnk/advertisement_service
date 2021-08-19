@@ -2,6 +2,7 @@ CREATE TABLE advert (
                         id serial primary key,
                         title varchar(200) not null,
                         description varchar(1000),
+                        price int not null,
                         created timestamp not null default now()
 );
 
