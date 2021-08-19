@@ -33,3 +33,13 @@ func (r *AdvertPostgres) CreateAdvert(advert models.Advert)(int,error){
 
 	return id,tx.Commit()
 }
+
+func (r *AdvertPostgres) GetAdvertById(id int)(model.Advert,error){
+    var advert model.Advert
+    query:=fmt.Sprintf("SELECT * FROM %s WHERE id=$1",advertsTable)
+
+    if err:=r.db.Get(&advert,query,id); err!=nil{
+        return advert,err
+    }
+    return advert,nil
+}

@@ -19,6 +19,7 @@ func (h *Handler) InitRoutes() *gin.Engine{
     api:=router.Group("/adverts")
     {
         api.POST("/",h.createAdvert)
+        api.GET("/:id",h.getAdvertById)
     }
 
     return router

@@ -7,6 +7,7 @@ import (
 
 type Advert interface{
     CreateAdvert(advert models.Advert)(int,error)
+    GetAdvertById(id,fields []string)(advert models.Advert,error)
 }
 
 type Service struct{

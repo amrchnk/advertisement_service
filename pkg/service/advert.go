@@ -3,7 +3,6 @@ package service
 import (
     "github.com/amrchnk/advertisement_service/pkg/models"
     "github.com/amrchnk/advertisement_service/pkg/repository"
-//     "errors"
 )
 
 type AdvertService struct{
@@ -15,7 +14,6 @@ func NewAdvertService(repo *repository.Repository)*AdvertService{
 }
 
 func (s *AdvertService)CreateAdvert(advert models.Advert)(int,error){
-
     if ok:=advert.ValidateFields();ok!=nil{
         return 0,ok
     }
@@ -37,4 +35,15 @@ func (s *AdvertService)CreateAdvert(advert models.Advert)(int,error){
         }
     }
     return id,err
+}
+
+func (s *AdvertService) GetAdvertById(id,fields []string)(models.Advert,error){
+    var advert models.Advert
+
+    if ad,err:=s.repo.GetAdvertById(id);err!=nil{
+        return advert,err
+    }
+
+
+
 }
