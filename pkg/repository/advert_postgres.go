@@ -42,3 +42,12 @@ func (r *AdvertPostgres) GetAdvertById(id int)(models.Advert,error){
     err:=r.db.Get(&advert,query,id)
     return advert,err
 }
+
+func (r *AdvertPostgres) GetAllAdverts()([]models.Advert,error){
+    var adverts []models.Advert
+    queryAdverts:=fmt.Sprintf("SELECT id,title,price FROM %s",advertsTable)
+    if err:=r.db.Select(&adverts,queryAdverts); err!=nil{
+        return adverts,err
+    }
+    return adverts,nil
+}

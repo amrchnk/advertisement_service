@@ -72,3 +72,24 @@ func (s *AdvertService) GetAdvertById(id int,fields []string)(map[string]interfa
 
     return res,err
 }
+
+func (s *AdvertService) GetAllAdverts()([]map[string]interface{},error){
+    var res []map[string]interface{}
+    adverts,err:=s.repo.GetAllAdverts()
+    if err!=nil{
+        return res,err
+    }
+    for _,v:=range adverts{
+        photo,err:=s.repo.GetMainPhoto(v.Id)
+        if err!=nil{
+            return res,err
+        }
+        res=append(res,map[string]interface{}{
+            "title":v.Title,
+            "price":v.Price,
+            "photo":photo.Link,
+        })
+    }
+
+    return res,err
+}

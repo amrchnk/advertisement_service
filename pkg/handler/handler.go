@@ -20,6 +20,7 @@ func (h *Handler) InitRoutes() *gin.Engine{
     {
         api.POST("/",h.createAdvert)
         api.GET("/:id",h.getAdvertById)
+        api.GET("/",h.getAllAdverts)
     }
 
     return router

@@ -34,9 +34,12 @@ func (r *PhotoPostgres) CreatePhoto(photo models.Photo,adv_id int)(int,error){
 	return id,tx.Commit()
 }
 
-// func (r *PhotoPostgres) GetMainPhoto(advertId int)(models.Photo,error){
-//
-// }
+func (r *PhotoPostgres) GetMainPhoto(advertId int)(models.Photo,error){
+    var photo models.Photo
+    query:=fmt.Sprintf("SELECT link FROM %s WHERE advert_id=$1 AND first=true",photosTable)
+    err:=r.db.Get(&photo,query,advertId)
+    return photo,err
+}
 
 func (r *PhotoPostgres) GetAllPhotos(advertId int)([]models.Photo,error){
     var photos []models.Photo

@@ -5,7 +5,7 @@ import (
     "github.com/gin-gonic/gin"
     "net/http"
     "strconv"
-    "fmt"
+//     "fmt"
 )
 
 func (h *Handler) createAdvert(c *gin.Context){
@@ -21,7 +21,7 @@ func (h *Handler) createAdvert(c *gin.Context){
     id,err:=h.services.Advert.CreateAdvert(input)
     if err!=nil{
             c.AbortWithStatusJSON(http.StatusInternalServerError,map[string]interface{}{
-                    "id":id,
+                    "id":-1,
                     "status":http.StatusInternalServerError,
             })
         return
@@ -38,7 +38,6 @@ type AdvertFields struct{
 }
 
 func (a *AdvertFields) ValidateInput()bool{
-//     flag:=true
     if len(a.Fields)==0{
         return true
     }
@@ -64,7 +63,6 @@ func (h *Handler) getAdvertById(c *gin.Context){
         })
         return
     }
-    fmt.Println(input.Fields)
     id,err:=strconv.Atoi(c.Param("id"))
     if err!=nil{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
@@ -75,8 +73,6 @@ func (h *Handler) getAdvertById(c *gin.Context){
         return
     }
     res,err:=h.services.Advert.GetAdvertById(id,input.Fields)
-    fmt.Println(res)
-    fmt.Println(err)
     if err!=nil{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
@@ -86,4 +82,18 @@ func (h *Handler) getAdvertById(c *gin.Context){
     }
 
     c.JSON(http.StatusOK,res)
+}
+
+func (h *Handler) getAllAdverts(c *gin.Context){
+    adverts,err:=h.services.GetAllAdverts()
+    if err!=nil{
+        c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
+            "id":-1,
+            "status":http.StatusBadRequest,
+            "err":"id isn't valid",
+        })
+        return
+    }
+
+    c.JSON(http.StatusOK,adverts)
 }
