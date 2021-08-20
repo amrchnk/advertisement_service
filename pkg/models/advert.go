@@ -1,11 +1,11 @@
 package models
 
 import (
-	"time"
+    "errors"
 )
 
 type Advert struct{
-	Id int `json:"-"`
+	Id int `json:"-" db:"id"`
 	Title string `json:"title"`
 	Description string `json:"description"`
 	Price *int `json:"price"`
@@ -14,19 +14,19 @@ type Advert struct{
 
 func (m *Advert) ValidateFields()error{
     if len(m.Title)>200{
-        return error
+        return errors.New("Invalid data")
     }
 
     if len(m.Description)>1000{
-        return error
+        return errors.New("Invalid data")
     }
 
     if len(m.Photos)>3{
-        return error
+        return errors.New("Invalid data")
     }
 
     if m.Title=="" || m.Price==nil || len(m.Photos)==0{
-        return error
+        return errors.New("Invalid data")
     }
 
     return nil

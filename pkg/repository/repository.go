@@ -7,10 +7,12 @@ import (
 
 type Advert interface{
 	CreateAdvert(advert models.Advert)(int,error)
+	GetAdvertById(id int)(models.Advert,error)
 }
 
 type Photo interface{
 	CreatePhoto(photo models.Photo,adv_id int)(int,error)
+	GetAllPhotos(advertId int)([]models.Photo,error)
 }
 
 type Repository struct {

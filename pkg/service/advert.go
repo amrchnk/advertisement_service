@@ -37,13 +37,38 @@ func (s *AdvertService)CreateAdvert(advert models.Advert)(int,error){
     return id,err
 }
 
-func (s *AdvertService) GetAdvertById(id,fields []string)(models.Advert,error){
-    var advert models.Advert
+func (s *AdvertService) GetAdvertById(id int,fields []string)(map[string]interface{},error){
 
-    if ad,err:=s.repo.GetAdvertById(id);err!=nil{
-        return advert,err
+    advert,err:=s.repo.GetAdvertById(id)
+    if err!=nil{
+        return map[string]interface{}{},err
     }
 
+    photos,err:=s.repo.GetAllPhotos(id)
+    if err!=nil{
+        return map[string]interface{}{},err
+    }
 
+    var res=map[string]interface{}{
+        "title":advert.Title,
+        "price":advert.Price,
+        "photos":photos[0].Link,
+    }
 
+    if len(fields)!=0{
+        for _,item:= range fields {
+            if item=="photos"{
+                var mas []string
+                for _,photo:= range photos{
+                    mas=append(mas,photo.Link)
+                }
+                res["photos"]=mas
+            }
+            if item=="description"{
+                res["description"]=advert.Description
+            }
+        }
+    }
+
+    return res,err
 }

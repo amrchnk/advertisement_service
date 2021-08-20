@@ -5,6 +5,7 @@ import (
     "github.com/gin-gonic/gin"
     "net/http"
     "strconv"
+    "fmt"
 )
 
 func (h *Handler) createAdvert(c *gin.Context){
@@ -37,8 +38,15 @@ type AdvertFields struct{
 }
 
 func (a *AdvertFields) ValidateInput()bool{
-    for _,item:=range a{
-        if item!="description"||item!="photos"{
+//     flag:=true
+    if len(a.Fields)==0{
+        return true
+    }
+
+    for i:=0;i<len(a.Fields);i++{
+        if a.Fields[i]=="description"||a.Fields[i]=="photos"{
+            continue
+        } else{
             return false
         }
     }
@@ -47,27 +55,28 @@ func (a *AdvertFields) ValidateInput()bool{
 
 func (h *Handler) getAdvertById(c *gin.Context){
     var input AdvertFields
-
     c.BindJSON(&input)
-
     if !input.ValidateInput(){
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
+            "err":"body is not valid",
         })
         return
     }
-
+    fmt.Println(input.Fields)
     id,err:=strconv.Atoi(c.Param("id"))
     if err!=nil{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
+            "err":"id isn't valid",
         })
         return
     }
-
-    res,err:=h.services.Advert.GetAdvertById(id,input)
+    res,err:=h.services.Advert.GetAdvertById(id,input.Fields)
+    fmt.Println(res)
+    fmt.Println(err)
     if err!=nil{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
@@ -77,8 +86,4 @@ func (h *Handler) getAdvertById(c *gin.Context){
     }
 
     c.JSON(http.StatusOK,res)
-}
-
-func (h *Handler) getAllAdverts(c *gin.Context){
-
 }
