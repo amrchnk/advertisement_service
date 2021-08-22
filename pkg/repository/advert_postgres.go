@@ -43,9 +43,25 @@ func (r *AdvertPostgres) GetAdvertById(id int)(models.Advert,error){
     return advert,err
 }
 
-func (r *AdvertPostgres) GetAllAdverts()([]models.Advert,error){
+func (r *AdvertPostgres) GetAllAdverts(input models.GetAdvertsFields)([]models.Advert,error){
     var adverts []models.Advert
-    queryAdverts:=fmt.Sprintf("SELECT id,title,price FROM %s",advertsTable)
+    s:=""
+    sort:=input.SortBy
+    switch{
+        case sort=="price":
+            s+=" ORDER BY price"
+        case sort=="date":
+            s+=" ORDER BY created"
+    }
+    d:=input.Direction
+    switch {
+        case d=="up":
+            s+=" ASC"
+        default:
+            s+=" DESC"
+    }
+    queryAdverts:=fmt.Sprintf("SELECT id,title,price FROM %s"+s,advertsTable)
+
     if err:=r.db.Select(&adverts,queryAdverts); err!=nil{
         return adverts,err
     }

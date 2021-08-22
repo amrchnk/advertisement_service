@@ -2,6 +2,8 @@ package models
 
 import (
     "errors"
+    "strings"
+//     "strconv"
 )
 
 type Advert struct{
@@ -30,4 +32,21 @@ func (m *Advert) ValidateFields()error{
     }
 
     return nil
+}
+
+type GetAdvertsFields struct{
+    Page int `json:"page"`
+    SortBy string `json:"sortBy"`
+    Direction string `json:"direction"`
+}
+
+func (af *GetAdvertsFields) ValidateInput()(string,bool){
+    if !(strings.ToLower(af.SortBy)=="date"||strings.ToLower(af.SortBy)=="price"){
+        return "sort incorrect",false
+    }
+
+    if !(strings.ToLower(af.Direction)!="up"||strings.ToLower(af.Direction)!="down"){
+        return "direct incorrect",false
+    }
+    return "ok",true
 }

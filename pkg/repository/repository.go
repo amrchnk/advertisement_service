@@ -8,7 +8,7 @@ import (
 type Advert interface{
 	CreateAdvert(advert models.Advert)(int,error)
 	GetAdvertById(id int)(models.Advert,error)
-	GetAllAdverts()([]models.Advert,error)
+	GetAllAdverts(input models.GetAdvertsFields)([]models.Advert,error)
 }
 
 type Photo interface{
