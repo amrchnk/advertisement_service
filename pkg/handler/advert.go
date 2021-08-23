@@ -5,13 +5,21 @@ import (
     "github.com/gin-gonic/gin"
     "net/http"
     "strconv"
-    "fmt"
+//     "fmt"
     "math"
 )
 
 func (h *Handler) createAdvert(c *gin.Context){
     var input models.Advert
     if err:=c.BindJSON(&input);err!=nil{
+        c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
+                "id":-1,
+                "status":http.StatusBadRequest,
+        })
+        return
+    }
+
+    if err:=input.ValidateFields();err!=nil{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
                 "id":-1,
                 "status":http.StatusBadRequest,
@@ -61,7 +69,7 @@ func (h *Handler) getAdvertById(c *gin.Context){
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
-            "err":"body is not valid",
+            "err":input,
         })
         return
     }

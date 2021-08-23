@@ -10,7 +10,7 @@ type Advert struct{
 	Id int `json:"-" db:"id"`
 	Title string `json:"title"`
 	Description string `json:"description"`
-	Price *int `json:"price"`
+	Price int `json:"price"`
 	Photos []string `json:"photos"`
 }
 
@@ -27,7 +27,7 @@ func (m *Advert) ValidateFields()error{
         return errors.New("Invalid data")
     }
 
-    if m.Title=="" || m.Price==nil || len(m.Photos)==0{
+    if m.Title=="" || m.Price==0 || len(m.Photos)==0{
         return errors.New("Invalid data")
     }
 

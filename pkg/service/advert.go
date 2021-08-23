@@ -14,11 +14,13 @@ func NewAdvertService(repo *repository.Repository)*AdvertService{
 }
 
 func (s *AdvertService)CreateAdvert(advert models.Advert)(int,error){
-    if ok:=advert.ValidateFields();ok!=nil{
-        return 0,ok
+//     if ok:=advert.ValidateFields();ok!=nil{
+//         return 0,ok
+//     }
+    id,err:=s.repo.CreateAdvert(advert);
+    if err!=nil{
+        return s.repo.CreateAdvert(advert)
     }
-
-    id,err:=s.repo.CreateAdvert(advert)
 
     for i,item:=range advert.Photos{
         var photo = models.Photo{
