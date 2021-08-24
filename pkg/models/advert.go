@@ -41,6 +41,9 @@ type GetAdvertsFields struct{
 }
 
 func (af *GetAdvertsFields) ValidateInput()(string,bool){
+    if af==nil{
+        return "fields mustn't be empty",false
+    }
     if !(strings.ToLower(af.SortBy)=="date"||strings.ToLower(af.SortBy)=="price"){
         return "sort incorrect",false
     }

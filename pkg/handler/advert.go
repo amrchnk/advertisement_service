@@ -69,7 +69,6 @@ func (h *Handler) getAdvertById(c *gin.Context){
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
-            "err":input,
         })
         return
     }
@@ -91,7 +90,7 @@ func (h *Handler) getAdvertById(c *gin.Context){
     }
     res,err:=h.services.Advert.GetAdvertById(id,input.Fields)
     if err!=nil{
-        c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
+        c.AbortWithStatusJSON(http.StatusInternalServerError,map[string]interface{}{
             "id":-1,
             "status":http.StatusInternalServerError,
         })
@@ -113,11 +112,11 @@ func (h *Handler) getAllAdverts(c *gin.Context){
         })
         return
     }
-    if _,err:=input.ValidateInput();!err{
+    if str,err:=input.ValidateInput();!err{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
-            "err":"body is not valid",
+            "err":str,
         })
         return
     }
