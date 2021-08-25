@@ -224,6 +224,26 @@ func TestHandler_getAllAdverts(t *testing.T){
             expectedStatusCode:400,
             expectedRequestBody:`{"err":"body is not valid","id":-1,"status":400}`,
         },
+        {
+            name:"Empty fields",
+            inputBody:`{}`,
+            mockBehavior: func(s *mock_service.MockAdvert, input interface{}){},
+            expectedStatusCode:400,
+            expectedRequestBody:`{"err":"fields mustn't be empty","id":-1,"status":400}`,
+        },
+        {
+            name:"OK",
+            inputBody:`{"page":1,"sortBy":"date","direction":"up"}`,
+            inputAdvertsFields: models.GetAdvertsFields{
+                Page:1,
+                SortBy:"date",
+                Direction:"up",
+            },
+            mockBehavior: func(s *mock_service.MockAdvert, input interface{}){
+                s.EXPECT().GetAllAdverts(input).Return([]map[string]interface{}{},errors.New("some server error"))},
+            expectedStatusCode:500,
+            expectedRequestBody:`{"id":-1,"status":500}`,
+        },
     }
 
     for _,testCase:=range testTable{

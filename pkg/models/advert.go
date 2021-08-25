@@ -3,6 +3,7 @@ package models
 import (
     "errors"
     "strings"
+//     "encoding/json"
 //     "strconv"
 )
 
@@ -41,15 +42,15 @@ type GetAdvertsFields struct{
 }
 
 func (af *GetAdvertsFields) ValidateInput()(string,bool){
-    if af==nil{
+    if af.Page==0 && af.SortBy=="" && af.Direction==""{
         return "fields mustn't be empty",false
     }
     if !(strings.ToLower(af.SortBy)=="date"||strings.ToLower(af.SortBy)=="price"){
-        return "sort incorrect",false
+        return "sort is incorrect",false
     }
 
     if !(strings.ToLower(af.Direction)!="up"||strings.ToLower(af.Direction)!="down"){
-        return "direct incorrect",false
+        return "direct is incorrect",false
     }
     return "ok",true
 }

@@ -14,9 +14,6 @@ func NewAdvertService(repo *repository.Repository)*AdvertService{
 }
 
 func (s *AdvertService)CreateAdvert(advert models.Advert)(int,error){
-//     if ok:=advert.ValidateFields();ok!=nil{
-//         return 0,ok
-//     }
     id,err:=s.repo.CreateAdvert(advert);
     if err!=nil{
         return s.repo.CreateAdvert(advert)

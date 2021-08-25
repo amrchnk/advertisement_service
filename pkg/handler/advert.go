@@ -122,13 +122,13 @@ func (h *Handler) getAllAdverts(c *gin.Context){
     }
     res,err:=h.services.GetAllAdverts(input)
     if err!=nil{
-        c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
+        c.AbortWithStatusJSON(http.StatusInternalServerError,map[string]interface{}{
             "id":-1,
             "status":http.StatusInternalServerError,
         })
         return
      }
-    if (input.Page==0||int(math.Ceil(float64(len(res))/float64(pagination)))<input.Page){
+    if (int(math.Ceil(float64(len(res))/float64(pagination)))<input.Page){
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,

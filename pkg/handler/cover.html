@@ -55,7 +55,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/amrchnk/advertisement_service/pkg/handler/advert.go (80.4%)</option>
+				<option value="file0">github.com/amrchnk/advertisement_service/pkg/handler/advert.go (91.1%)</option>
 				
 				<option value="file1">github.com/amrchnk/advertisement_service/pkg/handler/handler.go (12.5%)</option>
 				
@@ -177,7 +177,7 @@ func (h *Handler) getAllAdverts(c *gin.Context)<span class="cov8" title="1">{
     const pagination=10
     var input models.GetAdvertsFields
 
-    if err:=c.BindJSON(&amp;input);err!=nil</span><span class="cov0" title="0">{
+    if err:=c.BindJSON(&amp;input);err!=nil</span><span class="cov8" title="1">{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
@@ -185,23 +185,23 @@ func (h *Handler) getAllAdverts(c *gin.Context)<span class="cov8" title="1">{
         })
         return
     }</span>
-    <span class="cov8" title="1">if _,err:=input.ValidateInput();!err</span><span class="cov0" title="0">{
+    <span class="cov8" title="1">if str,err:=input.ValidateInput();!err</span><span class="cov8" title="1">{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
-            "err":"body is not valid",
+            "err":str,
         })
         return
     }</span>
     <span class="cov8" title="1">res,err:=h.services.GetAllAdverts(input)
-    if err!=nil</span><span class="cov0" title="0">{
-        c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
+    if err!=nil</span><span class="cov8" title="1">{
+        c.AbortWithStatusJSON(http.StatusInternalServerError,map[string]interface{}{
             "id":-1,
             "status":http.StatusInternalServerError,
         })
         return
      }</span>
-    <span class="cov8" title="1">if (input.Page==0||int(math.Ceil(float64(len(res))/float64(pagination)))&lt;input.Page)</span><span class="cov0" title="0">{
+    <span class="cov8" title="1">if (int(math.Ceil(float64(len(res))/float64(pagination)))&lt;input.Page)</span><span class="cov0" title="0">{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
