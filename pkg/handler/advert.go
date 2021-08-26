@@ -5,7 +5,6 @@ import (
     "github.com/gin-gonic/gin"
     "net/http"
     "strconv"
-//     "fmt"
     "math"
 )
 
@@ -46,19 +45,19 @@ type AdvertFields struct{
     Fields []string `json:"fields"`
 }
 
-func (a *AdvertFields) ValidateInput()bool{
+func (a *AdvertFields) ValidateInput()(string,bool){
     if len(a.Fields)==0{
-        return true
+        return "OK",true
     }
 
     for i:=0;i<len(a.Fields);i++{
         if a.Fields[i]=="description"||a.Fields[i]=="photos"{
             continue
         } else{
-            return false
+            return "Invalid fields name",false
         }
     }
-    return true
+    return "OK",true
 }
 
 
@@ -73,7 +72,7 @@ func (h *Handler) getAdvertById(c *gin.Context){
         return
     }
 
-    if !input.ValidateInput(){
+    if str,err:=input.ValidateInput();!err{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
@@ -108,7 +107,6 @@ func (h *Handler) getAllAdverts(c *gin.Context){
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
-            "err":"body is not valid",
         })
         return
     }
@@ -116,7 +114,6 @@ func (h *Handler) getAllAdverts(c *gin.Context){
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
-            "err":str,
         })
         return
     }

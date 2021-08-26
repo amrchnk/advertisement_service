@@ -1,0 +1,230 @@
+swagger: "2.0"
+info:
+  description: "Сервис реализует 3 простых метода работы с объявлениями: создание объявлений, постраничный вывод списка имеющихся объявлений, получение объявления по id"
+  version: "1.0"
+  title: "Cервис для хранения и подачи объявлений"
+
+host: "localhost:8000"
+basePath: "/adverts"
+tags:
+- name: "advert"
+  description: "Методы работы с объявлениями"
+schemes:
+- "http"
+paths:
+  /:
+    post:
+      tags:
+      - "advert"
+      summary: "Создание нового объяления"
+      description: "В тело запроса передаются следующие данные: название (title), описание (description), несколько ссылок на фотографии (photos[]), цена (price)"
+      operationId: "addAdvert"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Advert"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: "object"
+            properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 1
+                  status:
+                    type: integer
+                    example: 200
+        "400":
+          description: "Ошибка возникает, если в теле запроса указаны поля, которые невозможно передать в структуру, а так же, если эти поля невалидны. Валидность определяется по следующим правилам:\n - массив с ссылками на фото содержит не больше 3 элементов; 
+          
+          - описание содержит не больше 1000 символов; 
+          
+          - название содержит не больше 200 символов."
+          schema:
+            type: object
+            properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: -1
+                  status:
+                    type: integer
+                    example: 400
+        
+        "500":
+          description: "Ошибка возникает при получении некорректного ответа от сервера при вызове метода создания объявления"
+          schema:
+            type: object
+            properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: -1
+                  status:
+                    type: integer
+                    example: 500
+                    
+          
+    get:
+      tags:
+      - "advert"
+      summary: "Получение и постраничный вывод всех объявлений"
+      description: "В тело запроса передаются номер страницы, тип сортировки (по дате/цене), направление сортировки (убывание/возрастание)"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/GetAdverts"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Advert"
+        "400":
+          description: "Ошибка возникает при некорректном теле запроса (неправильные имена полей и типы значений, а так же пустое тело запроса)"
+          schema:
+            type: object
+            properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: -1
+                  status:
+                    type: integer
+                    example: 400
+        "500":
+          description: "Ошибка возникает при получении некорректного ответа от сервера при вызове метода получения объявления по id"
+          schema:
+            type: object
+            properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: -1
+                  status:
+                    type: integer
+                    example: 500
+     
+  /{id}:
+    get:
+      tags:
+      - "advert"
+      summary: "Выдача объявления по ID"
+      description: "Возвращает объявление с id, указанным в адресной строке. Обязательные поля в ответе: название объявления, цена, ссылка на главное фото. При желании в теле запроса можно запросить описание и ссылки на все фото, передав эти значения в параметре fields в теле запроса"
+      operationId: "getAdvertById"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path" 
+        name: "id"
+        description: "ID объявления"
+        required: true
+        type: "integer"
+      - name: body
+        in: body
+        required: false
+        schema:
+          $ref: "#/definitions/GetAdvert"
+        
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Advert"
+        "400":
+          description: "Ошибка возникает, если в теле запроса указаны поля, которые невозможно передать в структуру, а так же, если эти поля невалидны. Валидность определяется по следующим правилам:\n - массив с ссылками на фото содержит не больше 3 элементов; 
+          
+          - описание содержит не больше 1000 символов; 
+          
+          - название содержит не больше 200 символов."
+          schema:
+            type: object
+            properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: -1
+                  status:
+                    type: integer
+                    example: 400
+        "500":
+          description: "Ошибка возникает при получении некорректного ответа от сервера при вызове метода получения всех объявлений"
+          schema:
+            type: object
+            properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: -1
+                  status:
+                    type: integer
+                    example: 500
+definitions:
+  Advert:
+    type: "object"
+    required:
+    - "title"
+    - "price"
+    - "photos"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      title:
+        type: "string"
+        example: "Мобильный телефон"
+      description:
+        type: "string"
+        example: "Покупался 2 года назад за большие деньги"
+      price:
+        type: "integer"
+        example: 21000
+      photos:
+        type: "array"
+        items:
+          type: "string"
+          example: "link one"
+          maximum: 3
+          minimum: 1
+  GetAdvert:
+    type: object
+    properties:
+      fields:
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - description
+          - photos
+  GetAdverts:
+    type: object
+    properties:
+      page:
+        type: "integer"
+        example: 1
+      sortBy:
+        type: string
+        example: date
+        enum:
+        - date
+        - price
+      direction:
+        type: string
+        example: up
+        enum:
+        - up
+        - down

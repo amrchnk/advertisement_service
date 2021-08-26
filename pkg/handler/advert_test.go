@@ -140,7 +140,7 @@ func TestHandler_getAdvertById(t *testing.T){
             inputBody:`{"fields":["desription"]}`,
             mockBehavior: func(s *mock_service.MockAdvert, id int, fields []string){},
             expectedStatusCode:400,
-            expectedRequestBody:`{"id":-1,"status":400}`,
+            expectedRequestBody:`{"error":"Invalid fields name","id":-1,"status":400}`,
         },
         {
             name:"Binding error",
