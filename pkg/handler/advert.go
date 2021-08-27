@@ -72,7 +72,7 @@ func (h *Handler) getAdvertById(c *gin.Context){
         return
     }
 
-    if str,err:=input.ValidateInput();!err{
+    if _,err:=input.ValidateInput();!err{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,
@@ -110,7 +110,7 @@ func (h *Handler) getAllAdverts(c *gin.Context){
         })
         return
     }
-    if str,err:=input.ValidateInput();!err{
+    if _,err:=input.ValidateInput();!err{
         c.AbortWithStatusJSON(http.StatusBadRequest,map[string]interface{}{
             "id":-1,
             "status":http.StatusBadRequest,

@@ -1,5 +1,2 @@
 .env
 .idea
-docker-compose.yml
-Dockerfile
-wait-for-postgres.sh

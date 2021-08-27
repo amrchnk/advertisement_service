@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./
+    command: ./advert
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=111
+
+  db:
+    restart: always
+    build: ./schema
+    environment:
+      POSTGRES_PASSWORD: 111
+      POSTGRES_DB: advert
+      POSTGRES_USER: postgres
+    ports:
+      - 5432
